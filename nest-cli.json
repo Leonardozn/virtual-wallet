@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/virtual-wallet/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/virtual-wallet/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/virtual-wallet",
+  "projects": {
+    "virtual-wallet": {
+      "type": "application",
+      "root": "apps/virtual-wallet",
+      "entryFile": "main",
+      "sourceRoot": "apps/virtual-wallet/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/virtual-wallet/tsconfig.app.json"
+      }
+    },
+    "api": {
+      "type": "application",
+      "root": "apps/api",
+      "entryFile": "main",
+      "sourceRoot": "apps/api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api/tsconfig.app.json"
+      }
+    },
+    "lib-test": {
+      "type": "library",
+      "root": "libs/lib-test",
+      "entryFile": "index",
+      "sourceRoot": "libs/lib-test/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/lib-test/tsconfig.lib.json"
+      }
+    }
+  }
+}
