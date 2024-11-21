@@ -1,9 +1,15 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { ClientsModule } from './clients/clients.module';
+import { MongodbConnModule } from '@app/mongodb-conn';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ClientsModule],
+  imports: [
+    ClientsModule,
+    MongodbConnModule,
+    ConfigModule.forRoot()
+  ],
   controllers: [],
-  providers: [],
+  providers: []
 })
 export class AppModule {}

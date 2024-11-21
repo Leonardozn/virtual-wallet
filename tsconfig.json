@@ -23,6 +23,18 @@
       ],
       "@app/lib-test/*": [
         "libs/lib-test/src/*"
+      ],
+      "@app/mongodb-conn": [
+        "libs/mongodb-conn/src"
+      ],
+      "@app/mongodb-conn/*": [
+        "libs/mongodb-conn/src/*"
+      ],
+      "@app/axios-config": [
+        "libs/axios-config/src"
+      ],
+      "@app/axios-config/*": [
+        "libs/axios-config/src/*"
       ]
     }
   }

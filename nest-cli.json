@@ -36,6 +36,24 @@
       "compilerOptions": {
         "tsConfigPath": "libs/lib-test/tsconfig.lib.json"
       }
+    },
+    "mongodb-conn": {
+      "type": "library",
+      "root": "libs/mongodb-conn",
+      "entryFile": "index",
+      "sourceRoot": "libs/mongodb-conn/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/mongodb-conn/tsconfig.lib.json"
+      }
+    },
+    "axios-config": {
+      "type": "library",
+      "root": "libs/axios-config",
+      "entryFile": "index",
+      "sourceRoot": "libs/axios-config/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/axios-config/tsconfig.lib.json"
+      }
     }
   }
 }
