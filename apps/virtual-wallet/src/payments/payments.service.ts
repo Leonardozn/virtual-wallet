@@ -1,16 +1,16 @@
 import { Injectable, NotFoundException, HttpException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Clients, ClientsDocument } from './schemas/clients.schema';
+import { Payments, PaymentsDocument } from './schemas/payments.schema';
 import { Types } from 'mongoose';
 
 @Injectable()
-export class ClientsService {
-  constructor(@InjectModel(Clients.name) private clientsModel: Model<ClientsDocument>) {}
+export class PaymentsService {
+  constructor(@InjectModel(Payments.name) private paymentsModel: Model<PaymentsDocument>) {}
 
   async create(body: any) {
     try {
-      let document = new this.clientsModel(body);
+      let document = new this.paymentsModel(body);
       document = await document.save();
       document = await this.findOne(document._id);
       
@@ -23,7 +23,7 @@ export class ClientsService {
 
   async findAll() {
     try {
-      return await this.clientsModel.aggregate([
+      return await this.paymentsModel.aggregate([
         {
           $match: {
             _id: { $ne: null }
@@ -32,10 +32,11 @@ export class ClientsService {
         { 
           $project: {
             _id: { $toString: "$_id" },
-            document: 1,
-            name: 1,
-            email: 1,
-            phone: 1
+            wallet: { $toString: "$wallet" },
+            client: { $toString: "$client" },
+            amount: 1,
+            startDate: 1,
+            endDate: 1
           }
         }
       ]);
@@ -48,7 +49,7 @@ export class ClientsService {
   async findOne(id: any) {
     try {
       if (!Types.ObjectId.isValid(id)) throw new HttpException(`Invalid id ${id}`, 400);
-      const document = await this.clientsModel.aggregate([
+      const document = await this.paymentsModel.aggregate([
         {
           $match: {
             _id: new Types.ObjectId(id)
@@ -57,15 +58,16 @@ export class ClientsService {
         { 
           $project: {
             _id: { $toString: "$_id" },
-            document: 1,
-            name: 1,
-            email: 1,
-            phone: 1
+            wallet: { $toString: "$wallet" },
+            client: { $toString: "$client" },
+            amount: 1,
+            startDate: 1,
+            endDate: 1
           }
         }
       ])
       
-      if (!document.length) throw new NotFoundException(`client with ID ${id} not found`);
+      if (!document.length) throw new NotFoundException(`payment with ID ${id} not found`);
       
       return document[0];
     } catch (error) {
@@ -77,8 +79,8 @@ export class ClientsService {
   async update(id: string, body: any) {
     try {
       if (!Types.ObjectId.isValid(id)) throw new HttpException(`Invalid id ${id}`, 400);
-      let document = await this.clientsModel.findByIdAndUpdate(id, body, { fields: { __v: 0 } }).lean();
-      if (!document) throw new NotFoundException(`client with ID ${id} not found`);
+      let document = await this.paymentsModel.findByIdAndUpdate(id, body, { fields: { __v: 0 } }).lean();
+      if (!document) throw new NotFoundException(`payment with ID ${id} not found`);
       
       document = await this.findOne(id);
       
@@ -92,8 +94,8 @@ export class ClientsService {
   async remove(id: string) {
     try {
       if (!Types.ObjectId.isValid(id)) throw new HttpException(`Invalid id ${id}`, 400);
-      const document = await this.clientsModel.deleteOne({ _id: id }).lean();
-      if (document.deletedCount === 0) throw new NotFoundException(`client with ID ${id} not found`);
+      const document = await this.paymentsModel.deleteOne({ _id: id }).lean();
+      if (document.deletedCount === 0) throw new NotFoundException(`payment with ID ${id} not found`);
   
       return document;
     } catch (error) {

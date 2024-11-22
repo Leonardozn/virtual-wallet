@@ -6,6 +6,9 @@ export type ClientsDocument = HydratedDocument<Clients>;
 @Schema()
 export class Clients {
   @Prop({ required: true })
+  document: string;
+
+  @Prop({ required: true })
   name: string;
 
   @Prop({ required: true })

@@ -4,6 +4,11 @@ export class UpdateClientDto {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
+  document?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
   name?: string;
 
   @IsString()

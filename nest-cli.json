@@ -54,6 +54,42 @@
       "compilerOptions": {
         "tsConfigPath": "libs/axios-config/tsconfig.lib.json"
       }
+    },
+    "xml-to-json": {
+      "type": "library",
+      "root": "libs/xml-to-json",
+      "entryFile": "index",
+      "sourceRoot": "libs/xml-to-json/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/xml-to-json/tsconfig.lib.json"
+      }
+    },
+    "handle-response": {
+      "type": "library",
+      "root": "libs/handle-response",
+      "entryFile": "index",
+      "sourceRoot": "libs/handle-response/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/handle-response/tsconfig.lib.json"
+      }
+    },
+    "parse-obj": {
+      "type": "library",
+      "root": "libs/parse-obj",
+      "entryFile": "index",
+      "sourceRoot": "libs/parse-obj/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/parse-obj/tsconfig.lib.json"
+      }
+    },
+    "random-string": {
+      "type": "library",
+      "root": "libs/random-string",
+      "entryFile": "index",
+      "sourceRoot": "libs/random-string/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/random-string/tsconfig.lib.json"
+      }
     }
   }
 }

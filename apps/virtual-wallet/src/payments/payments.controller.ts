@@ -1,16 +1,16 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors } from '@nestjs/common';
-import { ClientsService } from './clients.service';
+import { PaymentsService } from './payments.service';
 import { XmlResponseInterceptor } from '../interceptors/xml-response/xml-response.interceptor';
 
-@Controller('clients')
+@Controller('payments')
 @UseInterceptors(XmlResponseInterceptor)
-export class ClientsController {
-  constructor(private readonly clientsService: ClientsService) {}
+export class PaymentsController {
+  constructor(private readonly paymentsService: PaymentsService) {}
 
   @Post()
   async create(@Body() body: any) {
     try {
-      return await this.clientsService.create(body.clients);
+      return await this.paymentsService.create(body.payments);
     } catch (error) {
       console.error(error);
       return error.errors || error;
@@ -19,18 +19,18 @@ export class ClientsController {
 
   @Get()
   async findAll() {
-    return await this.clientsService.findAll();
+    return await this.paymentsService.findAll();
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return await this.clientsService.findOne(id);
+    return await this.paymentsService.findOne(id);
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() body: any) {
     try {
-      return await this.clientsService.update(id, body.clients);
+      return await this.paymentsService.update(id, body.payments);
     } catch (error) {
       console.error(error);
       return error.errors || error;
@@ -39,6 +39,6 @@ export class ClientsController {
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    return await this.clientsService.remove(id);
+    return await this.paymentsService.remove(id);
   }
 }

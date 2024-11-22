@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import axios, { AxiosInstance } from 'axios'
+import axios from 'axios';
 
 @Injectable()
 export class AxiosConfigService {
@@ -16,7 +16,10 @@ export class AxiosConfigService {
   getVirtualWalletConfig() {
     if (!this.virtualWalletConfig) {
       this.virtualWalletConfig = axios.create({
-        baseURL: process.env.SOAP_BASE_URL
+        baseURL: process.env.SOAP_BASE_URL,
+        params: { format: 'xml' },
+        headers: { 'Content-Type': 'application/xml' },
+        responseType: "document",
       });
     }
 

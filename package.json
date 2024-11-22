@@ -36,9 +36,11 @@
     "class-validator": "^0.14.1",
     "concurrently": "^9.1.0",
     "js2xmlparser": "^5.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.2",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
+    "ts-luxon": "^5.0.7-beta.0",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
@@ -87,7 +89,11 @@
     "moduleNameMapper": {
       "^@app/lib-test(|/.*)$": "<rootDir>/libs/lib-test/src/$1",
       "^@app/mongodb-conn(|/.*)$": "<rootDir>/libs/mongodb-conn/src/$1",
-      "^@app/axios-config(|/.*)$": "<rootDir>/libs/axios-config/src/$1"
+      "^@app/axios-config(|/.*)$": "<rootDir>/libs/axios-config/src/$1",
+      "^@app/xml-to-json(|/.*)$": "<rootDir>/libs/xml-to-json/src/$1",
+      "^@app/handle-response(|/.*)$": "<rootDir>/libs/handle-response/src/$1",
+      "^@app/parse-obj(|/.*)$": "<rootDir>/libs/parse-obj/src/$1",
+      "^@app/random-string(|/.*)$": "<rootDir>/libs/random-string/src/$1"
     }
   }
 }

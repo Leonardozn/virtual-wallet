@@ -35,6 +35,30 @@
       ],
       "@app/axios-config/*": [
         "libs/axios-config/src/*"
+      ],
+      "@app/xml-to-json": [
+        "libs/xml-to-json/src"
+      ],
+      "@app/xml-to-json/*": [
+        "libs/xml-to-json/src/*"
+      ],
+      "@app/handle-response": [
+        "libs/handle-response/src"
+      ],
+      "@app/handle-response/*": [
+        "libs/handle-response/src/*"
+      ],
+      "@app/parse-obj": [
+        "libs/parse-obj/src"
+      ],
+      "@app/parse-obj/*": [
+        "libs/parse-obj/src/*"
+      ],
+      "@app/random-string": [
+        "libs/random-string/src"
+      ],
+      "@app/random-string/*": [
+        "libs/random-string/src/*"
       ]
     }
   }
