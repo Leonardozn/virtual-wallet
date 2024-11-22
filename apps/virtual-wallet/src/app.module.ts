@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { WalletsModule } from './wallets/wallets.module';
 import { ParseObjModule } from '@app/parse-obj';
 import { PaymentsModule } from './payments/payments.module';
+import { CustomError } from '@app/custom-error';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { PaymentsModule } from './payments/payments.module';
     ConfigModule.forRoot(),
     WalletsModule,
     ParseObjModule,
-    PaymentsModule
+    PaymentsModule,
+    CustomError
   ],
   controllers: [],
   providers: []

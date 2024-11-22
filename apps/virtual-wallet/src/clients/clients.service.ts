@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException, HttpException } from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Clients, ClientsDocument } from './schemas/clients.schema';
 import { Types } from 'mongoose';
+import { CustomError } from '@app/custom-error';
 
 @Injectable()
 export class ClientsService {
@@ -47,7 +48,7 @@ export class ClientsService {
 
   async findOne(id: any) {
     try {
-      if (!Types.ObjectId.isValid(id)) throw new HttpException(`Invalid id ${id}`, 400);
+      if (!Types.ObjectId.isValid(id)) throw new CustomError(`Invalid id ${id}`, HttpStatus.BAD_REQUEST);
       const document = await this.clientsModel.aggregate([
         {
           $match: {
@@ -76,7 +77,7 @@ export class ClientsService {
 
   async update(id: string, body: any) {
     try {
-      if (!Types.ObjectId.isValid(id)) throw new HttpException(`Invalid id ${id}`, 400);
+      if (!Types.ObjectId.isValid(id)) throw new CustomError(`Invalid id ${id}`, HttpStatus.BAD_REQUEST);
       let document = await this.clientsModel.findByIdAndUpdate(id, body, { fields: { __v: 0 } }).lean();
       if (!document) throw new NotFoundException(`client with ID ${id} not found`);
       
@@ -91,7 +92,7 @@ export class ClientsService {
 
   async remove(id: string) {
     try {
-      if (!Types.ObjectId.isValid(id)) throw new HttpException(`Invalid id ${id}`, 400);
+      if (!Types.ObjectId.isValid(id)) throw new CustomError(`Invalid id ${id}`, HttpStatus.BAD_REQUEST);
       const document = await this.clientsModel.deleteOne({ _id: id }).lean();
       if (document.deletedCount === 0) throw new NotFoundException(`client with ID ${id} not found`);
   

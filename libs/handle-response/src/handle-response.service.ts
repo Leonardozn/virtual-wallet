@@ -1,65 +1,89 @@
-import { Injectable } from '@nestjs/common';
-import { error } from 'console';
-
-export enum ResponseType {
-  CREATED = 'created',
-  SUCCESS = 'success',
-  ERROR = 'error',
-}
+import { CustomError } from '@app/custom-error';
+import { HttpStatus, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class HandleResponseService {
-  buildResponse(obj: any, type: ResponseType) {
-    if (type === ResponseType.CREATED) {
+  static getExampleResponseFormat(status: number) {
+    if (status >= 400) {
       return {
-        message: 'Success!',
-        response: obj,
-        statusCode: 201
-      }
+        success: false,
+        message: 'Corresponding error message.',
+        statusCode: status,
+        content: null,
+      };
     }
 
-    if (type === ResponseType.SUCCESS) {
+    return {
+      success: true,
+      message: 'Success!',
+      statusCode: status,
+      content: {},
+    };
+  }
+
+  buildResponse(data: any): {
+    success: boolean;
+    message: string;
+    statusCode: number;
+    content: any | null;
+  } {
+    if (data instanceof Error || data instanceof CustomError) {
+      const statusCode = this.getStatusCode(data);
+      const errorMessage = this.getErrorMessage(data);
+      const errorContent = this.getErrorContent(data);
+      
       return {
-        message: 'Success!',
-        response: obj,
-        statusCode: 200
-      }
+        success: false,
+        message: errorMessage,
+        statusCode,
+        content: errorContent,
+      };
     }
 
-    if (type === ResponseType.ERROR) {
-      if (obj.response) {
-        console.error(obj.response);
+    return {
+      success: true,
+      message: 'success!',
+      statusCode: HttpStatus.OK,
+      content: data,
+    };
+  }
 
-        if (obj.response.status < 500) {
-          return {
-            message: obj.response.data,
-            error: "Internal server error.",
-            statusCode: obj.response.status
-          }
-        }
+  private getErrorContent(error: any) {
+    if ('isAxiosError' in error && (error as any).isAxiosError) return error.response.data;
+    return null;
+  }
 
-        return {
-          message: obj.response.data,
-          error: "Bad Request",
-          statusCode: obj.response.status
-        }
-      } else if (obj.request) {
-        console.error(obj.request);
+  private getErrorMessage(error: any) {
+    if (error.message) return error.message;
+    return 'An error occurred';
+  }
 
-        return {
-          message: obj.request,
-          error: "Internal server error.",
-          statusCode: 500
-        }
-      } else {
-        console.error(obj);
-
-        return {
-          message: obj.message,
-          error: obj,
-          statusCode: 500
-        }
+  private getStatusCode(error: Error): number {
+    if ('isAxiosError' in error && (error as any).isAxiosError) {
+      const axiosError = error as any;
+      if (axiosError.response && axiosError.response.status) {
+        return axiosError.response.status;
       }
+      return HttpStatus.BAD_GATEWAY;
+    }
+
+    if ('status' in error) {
+      return (error as any).status;
+    }
+    
+    switch (error.name) {
+      case 'CustomError':
+        return HttpStatus.BAD_REQUEST;
+      case 'ValidationError':
+        return HttpStatus.BAD_REQUEST;
+      case 'UnauthorizedError':
+        return HttpStatus.UNAUTHORIZED;
+      case 'ForbiddenError':
+        return HttpStatus.FORBIDDEN;
+      case 'NotFoundError':
+        return HttpStatus.NOT_FOUND;
+      default:
+        return HttpStatus.INTERNAL_SERVER_ERROR;
     }
   }
 }

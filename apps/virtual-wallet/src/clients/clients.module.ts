@@ -4,6 +4,7 @@ import { ClientsController } from './clients.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Clients, ClientsSchema } from './schemas/clients.schema';
 import { XmlRequestMiddleware } from '../middlewares/xml-request/xml-request.middleware';
+import { HandleResponseService } from '@app/handle-response';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { XmlRequestMiddleware } from '../middlewares/xml-request/xml-request.mid
     ]),
   ],
   controllers: [ClientsController],
-  providers: [ClientsService],
+  providers: [ClientsService, HandleResponseService],
 })
 
 export class ClientsModule {

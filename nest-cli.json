@@ -90,6 +90,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/random-string/tsconfig.lib.json"
       }
+    },
+    "custom-error": {
+      "type": "library",
+      "root": "libs/custom-error",
+      "entryFile": "index",
+      "sourceRoot": "libs/custom-error/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/custom-error/tsconfig.lib.json"
+      }
     }
   }
 }

@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException, HttpException } from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Payments, PaymentsDocument } from './schemas/payments.schema';
 import { Types } from 'mongoose';
+import { CustomError } from '@app/custom-error';
 
 @Injectable()
 export class PaymentsService {
@@ -48,7 +49,7 @@ export class PaymentsService {
 
   async findOne(id: any) {
     try {
-      if (!Types.ObjectId.isValid(id)) throw new HttpException(`Invalid id ${id}`, 400);
+      if (!Types.ObjectId.isValid(id)) throw new CustomError(`Invalid id ${id}`, HttpStatus.BAD_REQUEST);
       const document = await this.paymentsModel.aggregate([
         {
           $match: {
@@ -78,7 +79,7 @@ export class PaymentsService {
 
   async update(id: string, body: any) {
     try {
-      if (!Types.ObjectId.isValid(id)) throw new HttpException(`Invalid id ${id}`, 400);
+      if (!Types.ObjectId.isValid(id)) throw new CustomError(`Invalid id ${id}`, HttpStatus.BAD_REQUEST);
       let document = await this.paymentsModel.findByIdAndUpdate(id, body, { fields: { __v: 0 } }).lean();
       if (!document) throw new NotFoundException(`payment with ID ${id} not found`);
       
@@ -93,7 +94,7 @@ export class PaymentsService {
 
   async remove(id: string) {
     try {
-      if (!Types.ObjectId.isValid(id)) throw new HttpException(`Invalid id ${id}`, 400);
+      if (!Types.ObjectId.isValid(id)) throw new CustomError(`Invalid id ${id}`, HttpStatus.BAD_REQUEST);
       const document = await this.paymentsModel.deleteOne({ _id: id }).lean();
       if (document.deletedCount === 0) throw new NotFoundException(`payment with ID ${id} not found`);
   

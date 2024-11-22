@@ -12,6 +12,7 @@ import { ParseObjService } from '@app/parse-obj';
 import { PaymentsModule } from '../payments/payments.module';
 import { PaymentsService } from '../payments/payments.service';
 import { Payments, PaymentsSchema } from '../payments/schemas/payments.schema';
+import { HandleResponseService } from '@app/handle-response';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { Payments, PaymentsSchema } from '../payments/schemas/payments.schema';
     ])
   ],
   controllers: [WalletsController],
-  providers: [WalletsService, ClientsService, ParseObjService, PaymentsService],
+  providers: [WalletsService, ClientsService, ParseObjService, PaymentsService, HandleResponseService],
 })
 
 export class WalletsModule {

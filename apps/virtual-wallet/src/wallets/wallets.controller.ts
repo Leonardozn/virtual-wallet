@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, Put, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, Put, HttpStatus, Res } from '@nestjs/common';
 import { WalletsService } from './wallets.service';
 import { XmlResponseInterceptor } from '../interceptors/xml-response/xml-response.interceptor';
 import { ClientsService } from '../clients/clients.service';
@@ -8,6 +8,9 @@ import * as fs from 'fs'
 import { PaymentsService } from '../payments/payments.service';
 import { PaymentStatusType } from '../payments/schemas/payments.schema';
 import { DateTime } from 'ts-luxon';
+import { HandleResponseService } from '@app/handle-response';
+import { CustomError } from '@app/custom-error';
+import { Response } from 'express';
 
 @Controller('wallets')
 @UseInterceptors(XmlResponseInterceptor)
@@ -16,27 +19,26 @@ export class WalletsController {
     private readonly walletsService: WalletsService,
     private readonly clientsService: ClientsService,
     private readonly randomString: RandomStringService,
-    private readonly paymentsService: PaymentsService
+    private readonly paymentsService: PaymentsService,
+    private readonly handleResponse: HandleResponseService
   ) {}
 
   @Post()
   async create(@Body() body: any) {
-    try {
-      return await this.walletsService.create(body.wallets);
-    } catch (error) {
-      console.error(error);
-      return error.errors || error;
-    }
+    const response = await this.walletsService.create(body.wallets);
+    return this.handleResponse.buildResponse(response);
   }
 
   @Get()
   async findAll() {
-    return await this.walletsService.findAll();
+    const response = await this.walletsService.findAll();
+    return this.handleResponse.buildResponse(response);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return await this.walletsService.findOne(id);
+    const response = await this.walletsService.findOne(id);
+    return this.handleResponse.buildResponse(response);
   }
 
   @Get('check/:id/:document/:phone')
@@ -46,24 +48,20 @@ export class WalletsController {
       const client = await this.clientsService.findOne(wallet.client);
 
       if (client.document !== document || client.phone !== phone) {
-        throw new HttpException({ status: HttpStatus.BAD_REQUEST, error: 'The parameters sent do not match.' }, HttpStatus.BAD_REQUEST);
+        throw new CustomError('The parameters sent do not match.', HttpStatus.BAD_REQUEST);
       }
 
-      return wallet;
+      return this.handleResponse.buildResponse(wallet);
     } catch (error) {
       console.error(error);
-      return error.errors || error;
+      return this.handleResponse.buildResponse(error);
     }
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() body: any) {
-    try {
-      return await this.walletsService.update(id, body.wallets);
-    } catch (error) {
-      console.error(error);
-      return error.errors || error;
-    }
+    const response = await this.walletsService.update(id, body.wallets);
+    return this.handleResponse.buildResponse(response);
   }
 
   @Put('charge/:id')
@@ -73,15 +71,16 @@ export class WalletsController {
       const client = await this.clientsService.findOne(wallet.client);
 
       if (client.document !== body.wallets.document || client.phone !== body.wallets.phone) {
-        throw new HttpException({ status: HttpStatus.BAD_REQUEST, error: 'Invalid document or phone.' }, HttpStatus.BAD_REQUEST);
+        throw new CustomError('Invalid document or phone.', HttpStatus.BAD_REQUEST);
       }
 
       const newAmount = Number(body.wallets.amount) + wallet.amount;
 
-      return await this.walletsService.update(id, { amount: newAmount });
+      const response = await this.walletsService.update(id, { amount: newAmount });
+      return this.handleResponse.buildResponse(response);
     } catch (error) {
       console.error(error);
-      return error.errors || error;
+      return this.handleResponse.buildResponse(error);
     }
   }
 
@@ -129,16 +128,16 @@ export class WalletsController {
   
           fs.writeFileSync(inboxFileRoot, JSON.stringify(inboxFileContent, null, 2), 'utf-8');
           
-          return { message: 'Code sent to email. Please do not share the code. When entering, insert the code.' };
+          return this.handleResponse.buildResponse({ message: 'Code sent to email. Please do not share the code. When entering, insert the code.' });
         }
 
-        throw new HttpException({ status: HttpStatus.BAD_REQUEST, error: 'Error at create the payment.' }, HttpStatus.BAD_REQUEST);
+        throw new CustomError('Error at create the payment.', HttpStatus.BAD_REQUEST);
       }
 
-      throw new HttpException({ status: HttpStatus.BAD_REQUEST, error: 'The wallet does not have enough funds.' }, HttpStatus.BAD_REQUEST);
+      throw new CustomError('The wallet does not have enough funds.', HttpStatus.BAD_REQUEST);
     } catch (error) {
       console.error(error);
-      return error.errors || error;
+      return this.handleResponse.buildResponse(error);
     }
   }
 
@@ -156,18 +155,19 @@ export class WalletsController {
         await this.walletsService.update(wallet._id, { amount: newAmount });
         await this.paymentsService.update(payment._id, { status: PaymentStatusType.CONFIRMED, endDate: DateTime.now() });
 
-        return { message: 'Payment confirmed. Thank you for your purchase!' };
+        return this.handleResponse.buildResponse({ message: 'Payment confirmed. Thank you for your purchase!' });
       }
 
-      throw new HttpException({ status: HttpStatus.BAD_REQUEST, error: 'The wallet does not have enough funds.' }, HttpStatus.BAD_REQUEST);
+      throw new CustomError('The wallet does not have enough funds.', HttpStatus.BAD_REQUEST);
     } catch (error) {
       console.error(error);
-      return error.errors || error;
+      return this.handleResponse.buildResponse(error);
     }
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    return await this.walletsService.remove(id);
+    const response = await this.walletsService.remove(id);
+    return this.handleResponse.buildResponse(response);
   }
 }

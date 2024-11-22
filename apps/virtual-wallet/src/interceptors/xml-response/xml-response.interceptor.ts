@@ -16,6 +16,7 @@ export class XmlResponseInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       map((data) => {
+        if (data?.statusCode) response.status(data.statusCode);
         const sanitizedData = this.sanitizeKeys(data);
         return js2xmlparser.parse('response', sanitizedData);
       }),

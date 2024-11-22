@@ -4,13 +4,11 @@ import { UpdateClientDto } from './dto/update-client.dto';
 import { AxiosConfigService } from '@app/axios-config';
 import * as js2xmlparser from 'js2xmlparser';
 import { XmlToJsonService } from '@app/xml-to-json';
-import { HandleResponseService, ResponseType } from '@app/handle-response';
 
 @Injectable()
 export class ClientsService {
   constructor(
-    private axiosService: AxiosConfigService,
-    private handleResponse: HandleResponseService
+    private axiosService: AxiosConfigService
   ) {
     this.axiosService = AxiosConfigService.getInstance();
   }
@@ -23,9 +21,10 @@ export class ClientsService {
       data = await XmlToJsonService.parse(data);
       if (data.response.errors) throw { message: data.response._message, ...data.response.errors };
   
-      return this.handleResponse.buildResponse(data.response, ResponseType.CREATED);
+      data.response;
     } catch (error) {
-      return this.handleResponse.buildResponse(error, ResponseType.ERROR);
+      console.error(error);
+      return error;
     }
   }
 
@@ -35,9 +34,10 @@ export class ClientsService {
       let { data } = await httpService.get('/clients');
       data = await XmlToJsonService.parse(data);
   
-      return this.handleResponse.buildResponse(data.response, ResponseType.SUCCESS);
+      data.response;
     } catch (error) {
-      return this.handleResponse.buildResponse(error, ResponseType.ERROR);
+      console.error(error);
+      return error;
     }
   }
 
@@ -47,9 +47,10 @@ export class ClientsService {
       let { data } = await httpService.get(`/clients/${id}`);
       data = await XmlToJsonService.parse(data);
   
-      return this.handleResponse.buildResponse(data.response, ResponseType.SUCCESS);
+      data.response;
     } catch (error) {
-      return this.handleResponse.buildResponse(error, ResponseType.ERROR);
+      console.error(error);
+      return error;
     }
   }
 
@@ -61,9 +62,10 @@ export class ClientsService {
       data = await XmlToJsonService.parse(data);
       if (data.response.errors) throw { message: data.response._message, ...data.response.errors };
       
-      return this.handleResponse.buildResponse(data.response, ResponseType.SUCCESS);
+      data.response;
     } catch (error) {
-      return this.handleResponse.buildResponse(error, ResponseType.ERROR);
+      console.error(error);
+      return error;
     }
   }
 
@@ -73,9 +75,10 @@ export class ClientsService {
       let { data } = await httpService.delete(`/clients/${id}`);
       data = await XmlToJsonService.parse(data);
   
-      return this.handleResponse.buildResponse(data.response, ResponseType.SUCCESS);
+      data.response;
     } catch (error) {
-      return this.handleResponse.buildResponse(error, ResponseType.ERROR);
+      console.error(error);
+      return error;
     }
   }
 }

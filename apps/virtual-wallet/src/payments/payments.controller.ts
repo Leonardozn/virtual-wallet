@@ -1,44 +1,43 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { XmlResponseInterceptor } from '../interceptors/xml-response/xml-response.interceptor';
+import { HandleResponseService } from '@app/handle-response';
 
 @Controller('payments')
 @UseInterceptors(XmlResponseInterceptor)
 export class PaymentsController {
-  constructor(private readonly paymentsService: PaymentsService) {}
+  constructor(
+    private readonly paymentsService: PaymentsService,
+    private handleResponse: HandleResponseService
+  ) {}
 
   @Post()
   async create(@Body() body: any) {
-    try {
-      return await this.paymentsService.create(body.payments);
-    } catch (error) {
-      console.error(error);
-      return error.errors || error;
-    }
+    const response = await this.paymentsService.create(body.payments);
+    return this.handleResponse.buildResponse(response);
   }
 
   @Get()
   async findAll() {
-    return await this.paymentsService.findAll();
+    const response = await this.paymentsService.findAll();
+    return this.handleResponse.buildResponse(response);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return await this.paymentsService.findOne(id);
+    const response = await this.paymentsService.findOne(id);
+    return this.handleResponse.buildResponse(response);
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() body: any) {
-    try {
-      return await this.paymentsService.update(id, body.payments);
-    } catch (error) {
-      console.error(error);
-      return error.errors || error;
-    }
+    const response = await this.paymentsService.update(id, body.payments);
+    return this.handleResponse.buildResponse(response);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    return await this.paymentsService.remove(id);
+    const response = await this.paymentsService.remove(id);
+    return this.handleResponse.buildResponse(response);
   }
 }

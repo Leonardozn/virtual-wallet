@@ -59,6 +59,12 @@
       ],
       "@app/random-string/*": [
         "libs/random-string/src/*"
+      ],
+      "@app/custom-error": [
+        "libs/custom-error/src"
+      ],
+      "@app/custom-error/*": [
+        "libs/custom-error/src/*"
       ]
     }
   }

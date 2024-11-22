@@ -4,7 +4,6 @@ import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { AxiosConfigService } from '@app/axios-config';
 import * as js2xmlparser from 'js2xmlparser';
 import { XmlToJsonService } from '@app/xml-to-json';
-import { HandleResponseService, ResponseType } from '@app/handle-response';
 import { ChargeWalletDto } from './dto/charge-wallet.dto';
 import { PayWalletDto } from './dto/pay-wallet.dto';
 import { ConfirmPaymentWalletDto } from './dto/confir-payment.dto';
@@ -12,8 +11,7 @@ import { ConfirmPaymentWalletDto } from './dto/confir-payment.dto';
 @Injectable()
 export class WalletsService {
   constructor(
-    private axiosService: AxiosConfigService,
-    private handleResponse: HandleResponseService
+    private axiosService: AxiosConfigService
   ) {
     this.axiosService = AxiosConfigService.getInstance();
   }
@@ -26,9 +24,10 @@ export class WalletsService {
       data = await XmlToJsonService.parse(data);
       if (data.response.errors) throw { message: data.response._message, ...data.response.errors };
       
-      return this.handleResponse.buildResponse(data.response, ResponseType.CREATED);
+      return data.response;
     } catch (error) {
-      return this.handleResponse.buildResponse(error, ResponseType.ERROR);
+      console.error(error);
+      return error;
     }
   }
 
@@ -38,9 +37,10 @@ export class WalletsService {
       let { data } = await httpService.get('/wallets');
       data = await XmlToJsonService.parse(data);
   
-      return this.handleResponse.buildResponse(data.response, ResponseType.SUCCESS);
+      return data.response;
     } catch (error) {
-      return this.handleResponse.buildResponse(error, ResponseType.ERROR);
+      console.error(error);
+      return error;
     }
   }
 
@@ -50,9 +50,10 @@ export class WalletsService {
       let { data } = await httpService.get(`/wallets/${id}`);
       data = await XmlToJsonService.parse(data);
   
-      return this.handleResponse.buildResponse(data.response, ResponseType.SUCCESS);
+      return data.response;
     } catch (error) {
-      return this.handleResponse.buildResponse(error, ResponseType.ERROR);
+      console.error(error);
+      return error;
     }
   }
 
@@ -62,9 +63,10 @@ export class WalletsService {
       let { data } = await httpService.get(`/wallets/check/${id}/${document}/${phone}`);
       data = await XmlToJsonService.parse(data);
       
-      return this.handleResponse.buildResponse(data.response, ResponseType.SUCCESS);
+      return data.response;
     } catch (error) {
-      return this.handleResponse.buildResponse(error, ResponseType.ERROR);
+      console.error(error);
+      return error;
     }
   }
 
@@ -76,9 +78,10 @@ export class WalletsService {
       data = await XmlToJsonService.parse(data);
       if (data.response.errors) throw { message: data.response._message, ...data.response.errors };
       
-      return this.handleResponse.buildResponse(data.response, ResponseType.SUCCESS);
+      return data.response;
     } catch (error) {
-      return this.handleResponse.buildResponse(error, ResponseType.ERROR);
+      console.error(error);
+      return error;
     }
   }
 
@@ -90,9 +93,10 @@ export class WalletsService {
       data = await XmlToJsonService.parse(data);
       if (data.response.errors) throw { message: data.response._message, ...data.response.errors };
       
-      return this.handleResponse.buildResponse(data.response, ResponseType.SUCCESS);
+      return data.response;
     } catch (error) {
-      return this.handleResponse.buildResponse(error, ResponseType.ERROR);
+      console.error(error);
+      return error;
     }
   }
 
@@ -104,9 +108,10 @@ export class WalletsService {
       data = await XmlToJsonService.parse(data);
       if (data.response.errors) throw { message: data.response._message, ...data.response.errors };
       
-      return this.handleResponse.buildResponse(data.response, ResponseType.SUCCESS);
+      return data.response;
     } catch (error) {
-      return this.handleResponse.buildResponse(error, ResponseType.ERROR);
+      console.error(error);
+      return error;
     }
   }
 
@@ -118,9 +123,10 @@ export class WalletsService {
       data = await XmlToJsonService.parse(data);
       if (data.response.errors) throw { message: data.response._message, ...data.response.errors };
       
-      return this.handleResponse.buildResponse(data.response, ResponseType.SUCCESS);
+      return data.response;
     } catch (error) {
-      return this.handleResponse.buildResponse(error, ResponseType.ERROR);
+      console.error(error);
+      return error;
     }
   }
 
@@ -130,9 +136,10 @@ export class WalletsService {
       let { data } = await httpService.delete(`/wallets/${id}`);
       data = await XmlToJsonService.parse(data);
   
-      return this.handleResponse.buildResponse(data.response, ResponseType.SUCCESS);
+      return data.response;
     } catch (error) {
-      return this.handleResponse.buildResponse(error, ResponseType.ERROR);
+      console.error(error);
+      return error;
     }
   }
 }
