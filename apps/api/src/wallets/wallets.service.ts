@@ -6,7 +6,7 @@ import * as js2xmlparser from 'js2xmlparser';
 import { XmlToJsonService } from '@app/xml-to-json';
 import { ChargeWalletDto } from './dto/charge-wallet.dto';
 import { PayWalletDto } from './dto/pay-wallet.dto';
-import { ConfirmPaymentWalletDto } from './dto/confir-payment.dto';
+import { ConfirmPaymentWalletDto } from './dto/confirm-payment.dto';
 
 @Injectable()
 export class WalletsService {

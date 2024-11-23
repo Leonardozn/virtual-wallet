@@ -4,7 +4,7 @@ import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { ChargeWalletDto } from './dto/charge-wallet.dto';
 import { PayWalletDto } from './dto/pay-wallet.dto';
-import { ConfirmPaymentWalletDto } from './dto/confir-payment.dto';
+import { ConfirmPaymentWalletDto } from './dto/confirm-payment.dto';
 import { HandleResponseService } from '@app/handle-response';
 import { Response } from 'express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';

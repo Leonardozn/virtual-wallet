@@ -42,7 +42,7 @@ export class ClientsController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Return one client', schema: { example: HandleResponseService.getExampleResponseFormat(HttpStatus.OK) } })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad request', schema: { example: HandleResponseService.getExampleResponseFormat(HttpStatus.BAD_REQUEST) } })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Not found', schema: { example: HandleResponseService.getExampleResponseFormat(HttpStatus.NOT_FOUND) } })
-  async indOne(@Res() res: Response, @Param('id') id: string) {
+  async findOne(@Res() res: Response, @Param('id') id: string) {
     let response = await this.clientsService.findOne(id);
     
     response = this.handleResponse.buildResponse(response);

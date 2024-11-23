@@ -21,7 +21,7 @@ export class ClientsService {
       data = await XmlToJsonService.parse(data);
       if (data.response.errors) throw { message: data.response._message, ...data.response.errors };
   
-      data.response;
+      return data.response;
     } catch (error) {
       console.error(error);
       return error;
@@ -34,7 +34,7 @@ export class ClientsService {
       let { data } = await httpService.get('/clients');
       data = await XmlToJsonService.parse(data);
   
-      data.response;
+      return data.response;
     } catch (error) {
       console.error(error);
       return error;
@@ -47,7 +47,7 @@ export class ClientsService {
       let { data } = await httpService.get(`/clients/${id}`);
       data = await XmlToJsonService.parse(data);
   
-      data.response;
+      return data.response;
     } catch (error) {
       console.error(error);
       return error;
@@ -62,7 +62,7 @@ export class ClientsService {
       data = await XmlToJsonService.parse(data);
       if (data.response.errors) throw { message: data.response._message, ...data.response.errors };
       
-      data.response;
+      return data.response;
     } catch (error) {
       console.error(error);
       return error;
@@ -75,7 +75,7 @@ export class ClientsService {
       let { data } = await httpService.delete(`/clients/${id}`);
       data = await XmlToJsonService.parse(data);
   
-      data.response;
+      return data.response;
     } catch (error) {
       console.error(error);
       return error;
